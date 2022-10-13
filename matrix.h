@@ -43,6 +43,7 @@ public:
     Matrix operator*(Matrix);
     vi operator[](int);
     friend ostream& operator<<(ostream &fout, const Matrix&);
+    friend istream& operator>>(istream &in, const Matrix&);
 
     void transposition() {
         vvi a(x[0].size());
@@ -125,6 +126,15 @@ ostream& operator<<(ostream &fout, const Matrix &a) {
         fout << "\n";
     }
     return fout;
+}
+
+istream& operator>>(istream &in, const Matrix &a) {
+    for (int i = 0; i < a.x.size(); i++) {
+        for (int j = 0; j < a.x[i].size(); j++) {
+            in >> a.x[i][j];
+        }
+    }
+    return in;
 }
 
 signed main() {
