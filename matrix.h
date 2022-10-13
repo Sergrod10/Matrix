@@ -39,6 +39,7 @@ public:
     Matrix operator+(Matrix);
     Matrix operator*(int);
     Matrix operator*(Matrix);
+    vi operator[](int);
 
     void transposition() {
         vvi a(x[0].size());
@@ -107,6 +108,10 @@ Matrix Matrix::operator*(Matrix a) {
     }
 
     return tmp;
+}
+
+vi Matrix::operator[](int a) {
+    return x[a];
 }
 
 #endif//INC_2_MATRIX_H
