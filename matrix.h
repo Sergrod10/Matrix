@@ -53,6 +53,18 @@ public:
         *this = Matrix(a); // ???
     }
 
+    Matrix fastexponentiation(Matrix a, int k) {
+        if (k == 0) {
+            return Matrix(x.size(), x[0].size(), 1);
+        }
+        if (k == 1) {
+            return a;
+        }
+        if (k % 2) {
+            return fastexponentiation(a, k - 1) * a;
+        }
+        return fastexponentiation(a, k / 2) * fastexponentiation(a, k / 2);
+    }
 };
 
 Matrix Matrix::operator+(Matrix a)  {
