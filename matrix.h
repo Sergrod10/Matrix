@@ -71,7 +71,30 @@ Matrix Matrix::operator*(int a) {
 }
 
 Matrix Matrix::operator*(Matrix a) {
+    Matrix tmp(x.size(), a.x[0].size());
+    vi cntstr(x.size());
+    for (int i = 0; i < x.size(); i++) {
+        int prod = 1;
+        for (int j = 0; j < x[i].size(); j++) {
+            prod *= x[i][j];
+        }
+        cntstr[i] = prod;
+    }
+    vi cntcol(a.x[0].size());
+    for (int i = 0; i < a.x[0].size(); i++) {
+        int prod = 1;
+        for (int j = 0; j < a.x.size(); j++) {
+            prod *= a.x[i][j];
+        }
+        cntcol[i] = prod;
+    }
+    for (int i = 0; i < x.size(); i++) {
+        for (int j = 0; j < a.x[0].size(); j++) {
+            tmp.x[i][j] = cntstr[i] * cntcol[j];
+        }
+    }
 
+    return tmp;
 }
 
 #endif//INC_2_MATRIX_H
