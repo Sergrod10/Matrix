@@ -16,6 +16,8 @@ using vvi = vec<vi>;
 using pi = pair<int, int>;
 using vpi = vec<pi>;
 
+using namespace std;
+
 #define INC_2_MATRIX_H
 
 class Matrix{
@@ -40,6 +42,7 @@ public:
     Matrix operator*(int);
     Matrix operator*(Matrix);
     vi operator[](int);
+    friend ostream& operator<<(ostream &fout, const Matrix&);
 
     void transposition() {
         vvi a(x[0].size());
@@ -112,6 +115,20 @@ Matrix Matrix::operator*(Matrix a) {
 
 vi Matrix::operator[](int a) {
     return x[a];
+}
+
+ostream& operator<<(ostream &fout, const Matrix &a) {
+    for (int i = 0; i < a.x.size(); i++) {
+        for (int j = 0; j < a.x[0].size(); j++) {
+            fout << a.x[i][j] << " ";
+        }
+        fout << "\n";
+    }
+    return fout;
+}
+
+signed main() {
+
 }
 
 #endif//INC_2_MATRIX_H
