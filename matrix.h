@@ -137,8 +137,14 @@ istream& operator>>(istream &in, const Matrix &a) {
     return in;
 }
 
+#endif//INC_2_MATRIX_H
+
 signed main() {
 
+    // размеры матрицы, где n - кол-во строк, m - столбцов
+    int n, m; cin >> n >> m;
+    Matrix matr(n, m); cin >> matr;
+
+    cout << matr;
 }
 
-#endif//INC_2_MATRIX_H

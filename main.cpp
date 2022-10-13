@@ -37,38 +37,44 @@ public:
     Matrix operator+(Matrix);
     Matrix operator*(int);
     Matrix operator*(Matrix);
-    vi operator[](int);
+    vi &operator[](int);
     friend ostream& operator<<(ostream &fout, const Matrix&);
-    friend istream& operator>>(istream &in, const Matrix&);
+    friend istream& operator>>(istream &in, Matrix&);
 
     void transposition() {
         vvi a(x[0].size());
         for (int i = 0; i < x[0].size(); i++) {
             for (int j = 0; j < x.size(); j++) {
-                a[i].pb(x[i][j]);
+                a[i].pb(x[j][i]);
             }
-        }
-        for (int i = 0; i < x[0].size(); i++) {
-            reverse(all(a[i]));
         }
         *this = Matrix(a); // ???
     }
 
-    Matrix fastexponentiation(Matrix a, int k) {
+    // быстрое возведение в степень, если матрица не квадратная, то вернет саму матрицу
+    Matrix fastexponentiation(int k) {
+        if (x.size() != x[0].size()) {
+            return *this;
+        }
         if (k == 0) {
             return Matrix(x.size(), x[0].size(), 1);
         }
         if (k == 1) {
-            return a;
+            return *this;
         }
         if (k % 2) {
-            return fastexponentiation(a, k - 1) * a;
+            return fastexponentiation(k - 1) * *this;
         }
-        return fastexponentiation(a, k / 2) * fastexponentiation(a, k / 2);
+        return fastexponentiation(k / 2) * fastexponentiation(k / 2);
     }
 };
 
+
+// Сложение матриц. Если матрицы не одного размера, то вернет первую матрицу
 Matrix Matrix::operator+(Matrix a)  {
+    if (x.size() != a.x.size() || x[0].size() != a.x[0].size()) {
+        return *this;
+    }
     vvi tmp(x.size());
     for (int i = 0; i < x.size(); i++) {
         for (int j = 0; j < x[i].size(); j++) {
@@ -83,34 +89,26 @@ Matrix Matrix::operator*(int a) {
     return (Matrix(x, a));
 }
 
+// умножение матриц. Если кол-во столбцов первой матрицы будет не равно кол-во строк второй матрицы, то вернет просто первую матрицу
 Matrix Matrix::operator*(Matrix a) {
+    if (x[0].size() != a.x.size()) {
+        return *this;
+    }
     Matrix tmp(x.size(), a.x[0].size());
-    vi cntstr(x.size());
-    for (int i = 0; i < x.size(); i++) {
-        int prod = 1;
-        for (int j = 0; j < x[i].size(); j++) {
-            prod *= x[i][j];
-        }
-        cntstr[i] = prod;
-    }
-    vi cntcol(a.x[0].size());
-    for (int i = 0; i < a.x[0].size(); i++) {
-        int prod = 1;
-        for (int j = 0; j < a.x.size(); j++) {
-            prod *= a.x[i][j];
-        }
-        cntcol[i] = prod;
-    }
     for (int i = 0; i < x.size(); i++) {
         for (int j = 0; j < a.x[0].size(); j++) {
-            tmp.x[i][j] = cntstr[i] * cntcol[j];
+            int nw = 0;
+            for (int k = 0; k < x[i].size(); k++) {
+                nw += x[i][k] * a.x[k][j];
+            }
+            tmp.x[i][j] = nw;
         }
     }
 
     return tmp;
 }
 
-vi Matrix::operator[](int a) {
+vi &Matrix::operator[](int a) {
     return x[a];
 }
 
@@ -124,7 +122,7 @@ ostream& operator<<(ostream &fout, const Matrix &a) {
     return fout;
 }
 
-istream& operator>>(istream &in, const Matrix &a) {
+istream& operator>>(istream &in, Matrix &a) {
     for (int i = 0; i < a.x.size(); i++) {
         for (int j = 0; j < a.x[i].size(); j++) {
             in >> a.x[i][j];
@@ -137,7 +135,60 @@ signed main() {
 
     // размеры матрицы, где n - кол-во строк, m - столбцов
     int n, m; cin >> n >> m;
-    Matrix matr(n, m); cin >> matr;
+    Matrix matr(n, m);
+    // заполните матрицу
+    cin >> matr;
 
+    // аналогично размеры второй матрицы
+    int n1, m1; cin >> n1 >> m1;
+    Matrix matr1(n1, m1);
+    // заполните вторую матрицу
+    cin >> matr1;
+
+    // введите коэффициет на который надо умножить матрицу
+    int k; cin >> k;
+
+    // введите степень, в которую надо возвести первую матрицу
+    int deg; cin >> deg;
+
+    cout << "First matrix:\n" << matr;
+    cout << "Second matrix:\n" << matr1;
+
+    cout << "Addition of two matrices:\n" << matr + matr1;
+    cout << "Product first matrix and num\n" << matr * k;
+    cout << "Product of two matrices:\n" << matr * matr1;
+    cout << "Exponentiation first matrix:\n" << matr.fastexponentiation(deg);
+    matr.transposition();
+    cout << "Transposition of first matrix:\n";
     cout << matr;
 }
+
+/*
+2 3
+10 9 4
+1 3 -1
+3 2
+30 10
+1 1
+2 2
+2
+1
+
+2 2
+10 1
+5 3
+2 2
+8 100
+4 6
+5
+3
+
+2 2
+10 1
+5 3
+2 2
+8 100
+4 6
+5
+4
+*/
