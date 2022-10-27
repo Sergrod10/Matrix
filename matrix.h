@@ -56,6 +56,7 @@ public:
     // быстрое возведение в степень, если матрица не квадратная, то вернет саму матрицу
     Matrix fastexponentiation(int k) {
         if (x.size() != x[0].size()) {
+            cout << "Wrong data\n";
             return *this;
         }
         if (k == 0) {
@@ -67,7 +68,8 @@ public:
         if (k % 2) {
             return fastexponentiation(k - 1) * *this;
         }
-        return fastexponentiation(k / 2) * fastexponentiation(k / 2);
+        Matrix now = fastexponentiation(k / 2);
+        return now * now;
     }
 };
 
@@ -75,6 +77,7 @@ public:
 // Сложение матриц. Если матрицы не одного размера, то вернет первую матрицу
 Matrix Matrix::operator+(Matrix a)  {
     if (x.size() != a.x.size() || x[0].size() != a.x[0].size()) {
+        cout << "Wrong data\n";
         return *this;
     }
     vvi tmp(x.size());
@@ -94,6 +97,7 @@ Matrix Matrix::operator*(int a) {
 // умножение матриц. Если кол-во столбцов первой матрицы будет не равно кол-во строк второй матрицы, то вернет просто первую матрицу
 Matrix Matrix::operator*(Matrix a) {
     if (x[0].size() != a.x.size()) {
+        cout << "Wrong data\n";
         return *this;
     }
     Matrix tmp(x.size(), a.x[0].size());
