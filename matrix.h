@@ -71,6 +71,32 @@ public:
         Matrix now = fastexponentiation(k / 2);
         return now * now;
     }
+
+    int getDeterminant() {
+        if (x.size() != x[0].size()) {
+            cout << "Wrong data!\n";
+            return 0;
+        }
+        int n = x.size();
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            int now = 1;
+            int now2 = -1;
+            int str = 0;
+            int col = i;
+            int col2 = n - i - 1;
+            for (int j = 0; j < n; j++) {
+                now *= x[str][col];
+                col = (col + 1) % n;
+                now2 *= x[str][col2];
+                str++;
+                col2 = (col2 - 1 + n) % n;
+            }
+            ans += now;
+            ans += now2;
+        }
+        return ans;
+    }
 };
 
 
