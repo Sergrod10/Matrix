@@ -8,6 +8,7 @@
 #define ff first
 #define ss second
 #define int long long
+#define ld long double
 
 using namespace std;
 using vi = vec<int>;
@@ -17,43 +18,64 @@ using vpi = vec<pi>;
 
 using namespace std;
 
+int domatr(vvi &a, int col, int x) {
+    vvi mainmatr(x);
+    for (int i = 0; i < x; i++) {
+        for (int j = 0; j < x; j++) {
+            mainmatr[i].pb(a[i][j]);
+        }
+    }
+    for (int i = 0; i < x; i++) {
+        mainmatr[i][col] = a[i][x];
+    }
+    Matrix ans(mainmatr);
+    return ans.getDeterminant();
+}
+
 signed main() {
     system("chcp 65001");
 
-    // размеры матрицы, где n - кол-во строк, m - столбцов
-    cout << "Введите размеры матрицы, первое число - кол-во строк, второе - столбов\n";
-    int n, m; cin >> n >> m;
-    cout << "Заполните матрицу, у которой размер, который Вы ввели выше\n";
-    Matrix matr(n, m);
-    // заполните матрицу
-    cin >> matr;
+    cout << "Bведите количество неизвестных в системе уравнений, которую надо решить\n";
+    int x; cin >> x;
+    cout << "Теперь введите сами уравнения в виде a b c d - это значит, что Вы ввели уравнение ax1+bx2+cx3=d. Количество уравнение должно равнять количеству неизвестных(если какого-то члена нет введите на его месте 0)\n";
+    vvi a(x);
+    for (int i = 0; i < x; i++) {
+        for (int j = 0; j < x + 1; j++) {
+            int y; cin >> y;
+            a[i].pb(y);
+        }
+    }
+    vvi mainmatr(x);
+    for (int i = 0; i < x; i++) {
+        for (int j = 0; j < x; j++) {
+            mainmatr[i].pb(a[i][j]);
+        }
+    }
+    //cout << mainmatr << endl;
+    Matrix mtr1(mainmatr);
+    int det = mtr1.getDeterminant();
+    //cout << det << endl;
+    if (!det) {
+        cout << "Degenerate case\n";
+    }
+    else {
+        vec<ld> ans;
+        for (int i = 0; i < x; i++) {
+            int now = domatr(a, i, x);
+            ans.pb((ld) now / (ld) det);
+        }
+        for (int i = 0; i < x; i++) {
+            cout << "x" << (i + 1) << ": " << ans[i] << "\n";
+        }
+        cout << endl;
+    }
 
-    // аналогично размеры второй матрицы
-    cout << "Введите размеры матрицы, первое число - кол-во строк, второе - столбов\n";
-    int n1, m1; cin >> n1 >> m1;
-    cout << "Заполните матрицу, у которой размер, который Вы ввели выше\n";
-    Matrix matr1(n1, m1);
-    // заполните вторую матрицу
-    cin >> matr1;
-
-    // Введите коэффициет на который надо умножить матрицу
-    cout << "Введите коэффициет на который надо умножить матрицу\n";
-    int k; cin >> k;
-
-    // введите степень, в которую надо возвести первую матрицу
-    cout << "Введите степень, в которую надо возвести первую матрицу\n";
-    int deg; cin >> deg;
-
-    cout << "First matrix:\n" << matr;
-    cout << "Second matrix:\n" << matr1;
-
-    cout << "Addition of two matrices:\n" << matr + matr1;
-    cout << "Product first matrix and num\n" << matr * k;
-    cout << "Product of two matrices:\n" << matr * matr1;
-    cout << "Exponentiation first matrix:\n" << matr.fastexponentiation(deg);
-    matr.transposition();
-    cout << "Transposition of first matrix:\n";
-    cout << matr;
+    cout << "Введите размеры матрицы и её саму для нахождения её определителя(работает с целыми числами)\n";
+    int n2, m2; cin >> n2 >> m2;
+    Matrix matr2(n2, m2);
+    cin >> matr2;
+    cout << matr2 << endl;
+    cout << "Determinant: " << matr2.getDeterminant() << endl;
 }
 
 /*
@@ -84,4 +106,9 @@ signed main() {
 4 6
 5
 4
+
+3
+2 -1 1 1
+3 1 5 -3
+5 0 3 2
 */
