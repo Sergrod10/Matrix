@@ -9,6 +9,7 @@
 #define ff first
 #define ss second
 #define int long long
+#define int long double
 
 using namespace std;
 using vi = vec<int>;
@@ -17,6 +18,12 @@ using pi = pair<int, int>;
 using vpi = vec<pi>;
 
 using namespace std;
+
+void Divide(vvi &a, int str, int x) {
+    for (int i = 0; i < a[str].size(); i++) {
+        a[str][i] /= x;
+    }
+}
 
 class Matrix{
     vvi x;
@@ -33,6 +40,13 @@ public:
             for (int j = 0; j < a[i].size(); j++) {
                 x[i].pb(a[i][j] * k);
             }
+        }
+    }
+
+    Matrix (vi &a, int k = 1) {
+        x.resize(1);
+        for (auto u : a) {
+            x[0].pb(u * k);
         }
     }
 
@@ -53,6 +67,10 @@ public:
         *this = Matrix(a); // ???
     }
 
+    vvi getMatrix() {
+        return (*this).x;
+    }
+
     // быстрое возведение в степень, если матрица не квадратная, то вернет саму матрицу
     Matrix fastexponentiation(int k) {
         if (x.size() != x[0].size()) {
@@ -65,7 +83,7 @@ public:
         if (k == 1) {
             return *this;
         }
-        if (k % 2) {
+        if ((long long) k % 2) {
             return fastexponentiation(k - 1) * *this;
         }
         Matrix now = fastexponentiation(k / 2);
@@ -87,15 +105,50 @@ public:
             int col2 = n - i - 1;
             for (int j = 0; j < n; j++) {
                 now *= x[str][col];
-                col = (col + 1) % n;
+                col = (long long) (col + 1) % (long long) n;
                 now2 *= x[str][col2];
                 str++;
-                col2 = (col2 - 1 + n) % n;
+                col2 = (long long) (col2 - 1 + n) % (long long) n;
             }
             ans += now;
             ans += now2;
         }
         return ans;
+    }
+
+    Matrix getInverse() {
+        if (x.size() != x[0].size()) {
+            cout << "Wrong data\n";
+            return *this;
+        }
+        int n = x.size();
+        vvi now = x;
+        vvi inv(x.size(), vi(x[0].size(), 0));
+        for (int i = 0; i < n; i++) {
+            inv[i][i] = 1;
+        }
+        for (int i = 0; i < n; i++) {
+            if (!now[i][i]) {
+                int ok = 0;
+                for (int j = i + 1; j < n; j++) {
+                    if (!now[j][i]) {
+                        ok = 1;
+                        swap(now[i], now[j]);
+                    }
+                }
+                if (!ok) {
+                    cout << "Wrong data\n";
+                    return *this;
+                }
+            }
+            Divide(now, i, now[i][i]);
+            for (int j = i + 1; j < n; j++) {
+                Matrix nw(now[j]);
+                Matrix fir(now[i], -now[j][i]);
+                now[j] = (nw + fir).getMatrix()[0];
+            }
+
+        }
     }
 };
 
