@@ -7,7 +7,7 @@
 #define all(a) a.begin(), a.end()
 #define ff first
 #define ss second
-#define int long double
+#define int long long
 
 using namespace std;
 using vi = vec<int>;
@@ -31,15 +31,15 @@ int domatr(vvi &a, int col, int x) {
     return ans.getDeterminant();
 }
 
-void Divide(vvi &a, int str, int x, int &y) {
-    for (int i = 0; i < a[str].size(); i++) {
-        a[str][i] /= x;
-    }
-    y /= x;
-}
-
 signed main() {
     system("chcp 65001");
+
+    cout << "Введите размеры матрицы и её саму для нахождения её определителя(работает с целыми числами)\n";
+    int n2, m2; cin >> n2 >> m2;
+    Matrix matr2(n2, m2);
+    cin >> matr2;
+    cout << matr2 << endl;
+    cout << "Determinant: " << matr2.getDeterminant() << endl;
 
     cout << "Bведите количество неизвестных в системе уравнений, которую надо решить\n";
     int x; cin >> x;
@@ -57,69 +57,23 @@ signed main() {
             mainmatr[i].pb(a[i][j]);
         }
     }
-    vi anses;
-    for (int i = 0; i < x; i++) {
-        anses.pb(a[i][x]);
+    //cout << mainmatr << endl;
+    Matrix mtr1(mainmatr);
+    int det = mtr1.getDeterminant();
+    //cout << det << endl;
+    if (!det) {
+        cout << "Degenerate case\n";
     }
-    if (mainmatr.size() != mainmatr[0].size()) {
-        cout << "Wrong data\n";
-        return 0;
-    }
-    int n = mainmatr.size();
-    vvi now = mainmatr;
-    vvi inv(mainmatr.size(), vi(mainmatr[0].size(), 0));
-    for (int i = 0; i < n; i++) {
-        inv[i][i] = 1;
-    }
-    for (int i = 0; i < n; i++) {
-        if (!now[i][i]) {
-            int ok = 0;
-            for (int j = i + 1; j < n; j++) {
-                if (!now[j][i]) {
-                    ok = 1;
-                    swap(now[i], now[j]);
-                    swap(anses[i], anses[j]);
-                }
-            }
-            if (!ok) {
-                cout << "Wrong data\n";
-                return 0;
-            }
+    else {
+        vec<long double> ans;
+        for (int i = 0; i < x; i++) {
+            int now = domatr(a, i, x);
+            ans.pb((long double) now / (long double) det);
         }
-        Divide(now, i, now[i][i], anses[i]);
-        for (int j = i + 1; j < n; j++) {
-            Matrix nw(now[j]);
-            Matrix fir(now[i], -now[j][i]);
-            anses[j] -= anses[i] * now[j][i];
-            now[j] = (nw + fir).getMatrix()[0];
+        for (int i = 0; i < x; i++) {
+            cout << "x" << (i + 1) << ": " << ans[i] << "\n";
         }
-        /*for (auto u : anses) {
-            cout << u << "\n";
-        }
-        cout << "\n";*/
-    }
-
-    /*for (auto u : now) {
-        for (auto y : u) {
-            cout << y << " ";
-        }
-        cout << "\n";
-    }
-    for (auto u : anses) {
-        cout << u << "\n";
-    }*/
-
-    vi solves(x, 0);
-    for (int i = x - 1; i >= 0; i--) {
-        int cnt = 0;
-        for (int j = i + 1; j < x; j++) {
-            cnt += now[i][j] * solves[j];
-        }
-        solves[i] = anses[i] - cnt;
-    }
-
-    for (int i = 0; i < x; i++) {
-        cout << "x" << (i + 1) << ": " << solves[i] << "\n";
+        cout << endl;
     }
 }
 
