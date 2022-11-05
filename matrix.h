@@ -9,7 +9,6 @@
 #define ff first
 #define ss second
 #define int long long
-#define int long double
 
 using namespace std;
 using vi = vec<int>;
@@ -19,14 +18,8 @@ using vpi = vec<pi>;
 
 using namespace std;
 
-void Divide(vvi &a, int str, int x) {
-    for (int i = 0; i < a[str].size(); i++) {
-        a[str][i] /= x;
-    }
-}
-
 class Matrix{
-    vvi x;
+    static vvi x;
 
 public:
 
@@ -40,13 +33,6 @@ public:
             for (int j = 0; j < a[i].size(); j++) {
                 x[i].pb(a[i][j] * k);
             }
-        }
-    }
-
-    Matrix (vi &a, int k = 1) {
-        x.resize(1);
-        for (auto u : a) {
-            x[0].pb(u * k);
         }
     }
 
@@ -67,10 +53,6 @@ public:
         *this = Matrix(a); // ???
     }
 
-    vvi getMatrix() {
-        return (*this).x;
-    }
-
     // быстрое возведение в степень, если матрица не квадратная, то вернет саму матрицу
     Matrix fastexponentiation(int k) {
         if (x.size() != x[0].size()) {
@@ -83,11 +65,24 @@ public:
         if (k == 1) {
             return *this;
         }
-        if ((long long) k % 2) {
+        if (k % 2) {
             return fastexponentiation(k - 1) * *this;
         }
         Matrix now = fastexponentiation(k / 2);
         return now * now;
+    }
+
+    Matrix getwithoutcolstr(int col) {
+        int n = x.size();
+        vvi ans(n - 1);
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (j != col) {
+                    ans[i - 1].pb(x[i][j]);
+                }
+            }
+        }
+        return Matrix(ans);
     }
 
     int getDeterminant() {
@@ -95,60 +90,15 @@ public:
             cout << "Wrong data!\n";
             return 0;
         }
-        int n = x.size();
+        if (x.size() == 2) {
+            return (x[0][0] * x[1][1] - x[0][1] * x[1][0]);
+        }
         int ans = 0;
-        for (int i = 0; i < n; i++) {
-            int now = 1;
-            int now2 = -1;
-            int str = 0;
-            int col = i;
-            int col2 = n - i - 1;
-            for (int j = 0; j < n; j++) {
-                now *= x[str][col];
-                col = (long long) (col + 1) % (long long) n;
-                now2 *= x[str][col2];
-                str++;
-                col2 = (long long) (col2 - 1 + n) % (long long) n;
-            }
-            ans += now;
-            ans += now2;
+        for (int i = 0; i < x.size(); i++) {
+            //Matrix nw = getwithoutcolstr(i);
+            //ans += (i % 2 ? -1 : 1) * getwithoutcolstr(i).getDeterminant();
         }
         return ans;
-    }
-
-    Matrix getInverse() {
-        if (x.size() != x[0].size()) {
-            cout << "Wrong data\n";
-            return *this;
-        }
-        int n = x.size();
-        vvi now = x;
-        vvi inv(x.size(), vi(x[0].size(), 0));
-        for (int i = 0; i < n; i++) {
-            inv[i][i] = 1;
-        }
-        for (int i = 0; i < n; i++) {
-            if (!now[i][i]) {
-                int ok = 0;
-                for (int j = i + 1; j < n; j++) {
-                    if (!now[j][i]) {
-                        ok = 1;
-                        swap(now[i], now[j]);
-                    }
-                }
-                if (!ok) {
-                    cout << "Wrong data\n";
-                    return *this;
-                }
-            }
-            Divide(now, i, now[i][i]);
-            for (int j = i + 1; j < n; j++) {
-                Matrix nw(now[j]);
-                Matrix fir(now[i], -now[j][i]);
-                now[j] = (nw + fir).getMatrix()[0];
-            }
-
-        }
     }
 };
 
