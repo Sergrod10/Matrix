@@ -95,8 +95,8 @@ public:
         }
         int ans = 0;
         for (int i = 0; i < x.size(); i++) {
-            //Matrix nw = getwithoutcolstr(i);
-            //ans += (i % 2 ? -1 : 1) * getwithoutcolstr(i).getDeterminant();
+            Matrix nw = getwithoutcolstr(i);
+            ans += (i % 2 ? -1 : 1) * getwithoutcolstr(i).getDeterminant() * x[0][i];
         }
         return ans;
     }
