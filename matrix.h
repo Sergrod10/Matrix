@@ -18,8 +18,8 @@ using vpi = vec<pi>;
 
 using namespace std;
 
-class Matrix{
-    static vvi x;
+class Matrix {
+    vvi x;
 
 public:
 
@@ -72,7 +72,7 @@ public:
         return now * now;
     }
 
-    /*Matrix getwithoutcolstr(int col) {
+    Matrix getwithoutcolstr(int col) {
         int n = x.size();
         vvi ans(n - 1);
         for (int i = 1; i < n; i++) {
@@ -99,7 +99,7 @@ public:
             //ans += (i % 2 ? -1 : 1) * getwithoutcolstr(i).getDeterminant();
         }
         return ans;
-    }*/
+    }
 };
 
 
