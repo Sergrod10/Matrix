@@ -17,7 +17,7 @@ using vpi = vec<pi>;
 
 using namespace std;
 
-int domatr(vvi &a, int col, int x) {
+/*int domatr(vvi &a, int col, int x) {
     vvi mainmatr(x);
     for (int i = 0; i < x; i++) {
         for (int j = 0; j < x; j++) {
@@ -29,12 +29,12 @@ int domatr(vvi &a, int col, int x) {
     }
     Matrix ans(mainmatr);
     return ans.getDeterminant();
-}
+}*/
 
 signed main() {
     system("chcp 65001");
 
-    cout << "Введите размеры матрицы и её саму для нахождения её определителя(работает с целыми числами)\n";
+    /*cout << "Введите размеры матрицы и её саму для нахождения её определителя(работает с целыми числами)\n";
     int n2, m2; cin >> n2 >> m2;
     Matrix matr2(n2, m2);
     cin >> matr2;
@@ -74,7 +74,7 @@ signed main() {
             cout << "x" << (i + 1) << ": " << ans[i] << "\n";
         }
         cout << endl;
-    }
+    }*/
 }
 
 /*
