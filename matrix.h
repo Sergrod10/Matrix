@@ -8,7 +8,6 @@
 #define all(a) a.begin(), a.end()
 #define ff first
 #define ss second
-#define int long long
 #define int long double
 
 using namespace std;
@@ -144,14 +143,39 @@ public:
                     return *this;
                 }
             }
-            Divide(now, i, now[i][i]);
+            int xx = now[i][i];
+            //cout << now[i][i] << endl;
+            Divide(now, i, xx);
+            Divide(inv, i, xx);
+            //cout << Matrix(inv) << endl;
             for (int j = i + 1; j < n; j++) {
+                int xx = -now[j][i];
                 Matrix nw(now[j]);
-                Matrix fir(now[i], -now[j][i]);
+                Matrix fir(now[i], xx);
                 now[j] = (nw + fir).getMatrix()[0];
-            }
 
+                Matrix nw2(inv[j]);
+                Matrix fir2(inv[i], xx);
+                inv[j] = (nw2 + fir2).getMatrix()[0];
+            }
+            //cout << Matrix(inv) << endl;
         }
+        //return Matrix(inv);
+        for (int i = n - 2; i >= 0; i--) {
+            for (int j = i + 1; j < n; j++) {
+                if (now[i][j]) {
+                    int xx = -now[i][j];
+                    Matrix deleter(now[j], xx);
+                    Matrix nw(now[i]);
+                    now[i] = (nw + deleter).getMatrix()[0];
+
+                    Matrix nw2(inv[i]);
+                    Matrix deleter2(inv[j], xx);
+                    inv[i] = (nw2 + deleter2).getMatrix()[0];
+                }
+            }
+        }
+        return Matrix(inv);
     }
 };
 

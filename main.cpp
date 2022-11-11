@@ -17,20 +17,6 @@ using vpi = vec<pi>;
 
 using namespace std;
 
-int domatr(vvi &a, int col, int x) {
-    vvi mainmatr(x);
-    for (int i = 0; i < x; i++) {
-        for (int j = 0; j < x; j++) {
-            mainmatr[i].pb(a[i][j]);
-        }
-    }
-    for (int i = 0; i < x; i++) {
-        mainmatr[i][col] = a[i][x];
-    }
-    Matrix ans(mainmatr);
-    return ans.getDeterminant();
-}
-
 void Divide(vvi &a, int str, int x, int &y) {
     for (int i = 0; i < a[str].size(); i++) {
         a[str][i] /= x;
@@ -40,6 +26,12 @@ void Divide(vvi &a, int str, int x, int &y) {
 
 signed main() {
     system("chcp 65001");
+
+    cout << "Введите n - размер матрицы, далее саму матрицу для получения обратной ей матрицы\n";
+    int szz; cin >> szz;
+    Matrix forinv(szz, szz); cin >> forinv;
+    cout << "Обратная матрица данной:\n" << forinv.getInverse();
+
 
     cout << "Bведите количество неизвестных в системе уравнений, которую надо решить\n";
     int x; cin >> x;
@@ -93,21 +85,7 @@ signed main() {
             anses[j] -= anses[i] * now[j][i];
             now[j] = (nw + fir).getMatrix()[0];
         }
-        /*for (auto u : anses) {
-            cout << u << "\n";
-        }
-        cout << "\n";*/
     }
-
-    /*for (auto u : now) {
-        for (auto y : u) {
-            cout << y << " ";
-        }
-        cout << "\n";
-    }
-    for (auto u : anses) {
-        cout << u << "\n";
-    }*/
 
     vi solves(x, 0);
     for (int i = x - 1; i >= 0; i--) {
@@ -133,7 +111,6 @@ signed main() {
 2 2
 2
 1
-
 2 2
 10 1
 5 3
@@ -142,7 +119,6 @@ signed main() {
 4 6
 5
 3
-
 2 2
 10 1
 5 3
@@ -151,9 +127,13 @@ signed main() {
 4 6
 5
 4
-
 3
 2 -1 1 1
 3 1 5 -3
 5 0 3 2
+
+3
+7 1 9
+4 0 5
+4 2 10
 */
